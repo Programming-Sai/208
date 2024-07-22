@@ -1,20 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { SafeAreaView, Text, StatusBar, Settings } from 'react-native';
+import CameraScreen from './components/CameraScreen';
+import Home from './components/HomeScreen';
+import History from './components/HistoryScreen';
 
-export default function App() {
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={{padding:20, backgroundColor:"black"}}>
+      <StatusBar barStyle="light-content" style={{backgroundColor:"red"}}/>
+      {/* <CameraScreen /> */}
+      {/* <Home /> */}
+      <History />
+    </SafeAreaView>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
