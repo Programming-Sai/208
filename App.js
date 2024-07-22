@@ -3,6 +3,7 @@ import { SafeAreaView, Text, StatusBar, Settings } from 'react-native';
 import CameraScreen from './components/CameraScreen';
 import Home from './components/HomeScreen';
 import History from './components/HistoryScreen';
+import Starred from './components/StarredScreen';
 
 const App = () => {
   return (
@@ -10,7 +11,8 @@ const App = () => {
       <StatusBar barStyle="light-content" style={{backgroundColor:"red"}}/>
       {/* <CameraScreen /> */}
       {/* <Home /> */}
-      <History />
+      {/* <History /> */}
+      <Starred />
     </SafeAreaView>
   );
 };

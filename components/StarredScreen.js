@@ -10,7 +10,7 @@ const initialHistoryData = [
     {key:'5', productImage:require('../assets/product3.jpg'), scanType:'Qrcode', productName:'Lorem', scannedDate:'01/01/2024', scannedTime: '02:30 AM'},
 ];
 
-const History = () => {
+const Starred = () => {
     const initializeStarredItems = () => {
         const initialState = {};
         initialHistoryData.forEach(item => {
@@ -27,6 +27,7 @@ const History = () => {
             ...prevState,
             [key]: !prevState[key]
         }));
+        removeItem(key);
     };
 
     useEffect(() => {
@@ -43,8 +44,8 @@ const History = () => {
     const removeItem = (key) => {
         Alert.alert(
             '',
-            'This Item Would be Deleted',
-            [{ text: 'Delete Item', onPress: () => setHistoryData(prevData => prevData.filter(item => item.key !== key)) }, {text: 'Cancel'}]
+            'The Item Would be Removed from Favourites',
+            [{ text: 'Remove From Favourites', onPress: () => setHistoryData(prevData => prevData.filter(item => item.key !== key)) }, {text: 'Cancel'}]
         );
     };
 
@@ -52,8 +53,8 @@ const History = () => {
 
         <View>
             <ScrollView style={{height:"100%"}}>
-              <Text style={{color:"white", padding:10, fontSize:20, fontWeight:"bold", }}>History</Text>
-              {historyData.map((item) => (
+            <Text style={{color:"white", padding:10, fontSize:20, fontWeight:"bold", }}>Favourites</Text>
+            {historyData.map((item) => (
                 <TouchableOpacity key={item.key} style={{ borderRadius: 20, borderWidth: 1, borderColor: "white", marginVertical: 10, overflow: "hidden", position: 'relative' }}>
                     <ImageBackground source={item.productImage} style={{ width: "100%", height: 120 }}>
                         <View style={{ backgroundColor: 'rgba(0,0,0,0.5)', width: "100%", height: "100%", padding: 10, display: "flex", justifyContent: "center", alignItems: "flex-start", gap: 10 }}>
@@ -63,12 +64,8 @@ const History = () => {
                             </View>
 
                             <View style={{ marginLeft: 180 }}>
-                                <TouchableOpacity onPress={() => toggleStarredItem(item.key)}>
-                                    <Image source={getImage(item.key)} resizeMode='contain' style={{ width: 30, height: 30, position: "absolute", top: -40, left: 30, padding: 5 }} />
-                                </TouchableOpacity>
-
                                 <TouchableOpacity onPress={() => removeItem(item.key)}>
-                                    <Image source={require('../assets/Delete.png')} resizeMode='contain' style={{ width: 30, height: 30, position: "absolute", top: -40, left: 90, padding: 10 }} />
+                                    <Image source={ require('../assets/StarSelect.png') } resizeMode='contain' style={{ width: 30, height: 30, position: "absolute", top: -40, left: 80, padding: 5 }} />
                                 </TouchableOpacity>
                             </View>
 
@@ -93,4 +90,4 @@ const History = () => {
 );
 };
 
-export default History;
+export default Starred;
