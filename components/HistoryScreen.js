@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ImageBackground, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import BottomDataView from './BottomDataView';
 
 const initialHistoryData = [
     {key:'0', productImage:require('../assets/picture5.jpg'), scanType:'Barcode', productName:'Lorem', scannedDate:'01/01/2024', scannedTime: '02:30 PM'},
@@ -21,6 +22,11 @@ const History = () => {
 
     const [historyData, setHistoryData] = useState(initialHistoryData);
     const [starredItems, setStarredItems] = useState(initializeStarredItems);
+    const [selectedItemKey, setSelectedItemKey] = useState(null); // Track selected item
+    const [showBottomData, setShowBottomData] = useState(true); // Control visibility of BottomDataView
+
+
+    
 
     const toggleStarredItem = (key) => {
         setStarredItems(prevState => ({
@@ -48,13 +54,19 @@ const History = () => {
         );
     };
 
+
+    const handleItemPress = (key) => {
+        setSelectedItemKey(key);
+        setShowBottomData(true);
+    };
+
     return (
 
-        <View>
-            <ScrollView style={{height:"100%"}}>
+        <View style={{padding:20}}>
+            <ScrollView style={{height:"100%", position:"relative"}}>
               <Text style={{color:"white", padding:10, fontSize:20, fontWeight:"bold", }}>History</Text>
               {historyData.map((item) => (
-                <TouchableOpacity key={item.key} style={{ borderRadius: 20, borderWidth: 1, borderColor: "white", marginVertical: 10, overflow: "hidden", position: 'relative' }}>
+                <TouchableOpacity onPress={()=>{handleItemPress(item.key)}} key={item.key} style={{ borderRadius: 20, borderWidth: 1, borderColor: "white", marginVertical: 10, overflow: "hidden", position: 'relative' }}>
                     <ImageBackground source={item.productImage} style={{ width: "100%", height: 120 }}>
                         <View style={{ backgroundColor: 'rgba(0,0,0,0.5)', width: "100%", height: "100%", padding: 10, display: "flex", justifyContent: "center", alignItems: "flex-start", gap: 10 }}>
                             <View style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", marginBottom: -10 }}>
@@ -87,7 +99,14 @@ const History = () => {
                 </TouchableOpacity>
             ))}
         </ScrollView>
-    
+            {showBottomData && selectedItemKey && (
+                <BottomDataView 
+                    key={selectedItemKey} // Ensure unique key for the BottomDataView
+                    customStyles={{ position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 0 , borderWidth:1, borderColor:"white", borderBottomWidth:0}} 
+                    externalOpen={showBottomData}
+                    setExternalOpen={setShowBottomData}
+                />
+            )}
         </View>
       
 );

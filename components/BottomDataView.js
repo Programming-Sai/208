@@ -15,7 +15,7 @@ data.reverse();
 
 
 
-const BottomDataView = ({ customStyles }) => {
+const BottomDataView = ({ customStyles, externalOpen, setExternalOpen  }) => {
   const [currentImage, setCurrentImage] = useState(require("../assets/picture.jpeg"));
   const [toggle, setToggle] = useState(false);
 
@@ -32,9 +32,9 @@ const BottomDataView = ({ customStyles }) => {
 
 
   return (
-    <View style={[{backgroundColor:"black", borderTopLeftRadius:40, borderTopRightRadius:40, height:toggle?"95%":0, flex:1, justifyContent:"center", alignItems:"center", }, customStyles]}>
-        <TouchableOpacity onPress={()=>{setToggle(!toggle)}} style={{borderWidth:1, width:200, borderRadius:50, backgroundColor:"black", marginTop:toggle?-10:-50, borderColor:"white", paddingBottom:toggle?0:10, marginBottom:toggle?0:-28, marginTop:-10}}>
-            <Text style={{transform: [{ rotate: '90 deg' }],borderColor:"white", textAlign:"center", fontWeight:"bold", fontSize:20, color:"white", }}> { toggle ? '\u27E9' : '\u27E8'} </Text>
+    <View style={[{backgroundColor:"black", borderTopLeftRadius:40, borderTopRightRadius:40, height:toggle || externalOpen ?"95%":0, flex:1, justifyContent:"center", alignItems:"center", zIndex: toggle || externalOpen  ? 10 : 5 }, customStyles]}>
+        <TouchableOpacity onPress={()=>{setToggle(!toggle); setExternalOpen(!externalOpen)}} style={{borderWidth:1, width:200, borderRadius:50, backgroundColor:"black", marginTop:toggle || externalOpen ?-10:-50, borderColor:"white", paddingBottom:toggle || externalOpen ?0:10, marginBottom:toggle || externalOpen ?0:-28, marginTop:-10}}>
+            <Text style={{transform: [{ rotate: '90 deg' }],borderColor:"white", textAlign:"center", fontWeight:"bold", fontSize:20, color:"white", }}> { toggle || externalOpen  ? '\u27E9' : '\u27E8'} </Text>
         </TouchableOpacity>
         <ScrollView style={{padding:10, marginTop:20, }}>
             <Image source={currentImage} style={{width:340, borderWidth:1, borderRadius:40, height:400, borderColor:"white"}}/>

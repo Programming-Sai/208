@@ -23,7 +23,7 @@ const renderItems = ({ item }) => {
 const SettingsPanel = ({ customStyles }) => {
   const [toggle, setToggle] = useState(true);
   return (
-    <View style={[{ backgroundColor: '#333', padding: 10, width: '80%', height: '50%', left:toggle?"-100%":0  }, customStyles]}>
+    <View style={[{ backgroundColor: '#333', padding: 10, width: '80%', height: '50%', left:toggle?"-100%":0, zIndex: toggle ? 5 : 10 }, customStyles]}>
       <FlatList
         keyExtractor={(item) => item.key}
         data={settings}
@@ -39,4 +39,3 @@ const SettingsPanel = ({ customStyles }) => {
 };
 
 export default SettingsPanel;
-{120, 100}

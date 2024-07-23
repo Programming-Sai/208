@@ -28,7 +28,7 @@ export default function CameraScreen() {
   }
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', width:"100%", position:"relative",}}>
+    <View style={{flex: 1, justifyContent: 'center', width:"100%", position:"relative", height:400}}>
       
       <CameraView style={{ flex: 1,}} facing={facing}>
         <View style={{ flex: 1, flexDirection: 'row', backgroundColor: 'transparent', margin: 64,}}>
@@ -40,8 +40,8 @@ export default function CameraScreen() {
         </View>
       </CameraView>
       
-      <SettingsPanel  customStyles={{backgroundColor:"rgba(0,0,0,0.6)", position:"absolute",top:0, zIndex:10, flex:1, justifyContent:"center", alignItems:"center", borderColor:"red", height:"100%", width:"85%"}}/>
-      <BottomDataView customStyles={{position:"absolute", bottom:0, left:0, right:0, zIndex:0}}/>
+      <SettingsPanel  customStyles={{backgroundColor:"rgba(0,0,0,0.6)", position:"absolute",top:0, flex:1, justifyContent:"center", alignItems:"center", borderColor:"red", height:"100%", width:"85%"}}/>
+      <BottomDataView customStyles={{position:"absolute", bottom:0, left:0, right:0}}/>
     </View>
   );
 }

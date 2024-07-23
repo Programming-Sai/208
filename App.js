@@ -7,7 +7,7 @@ import Starred from './components/StarredScreen';
 
 const App = () => {
   return (
-    <SafeAreaView style={{padding:20, backgroundColor:"black"}}>
+    <SafeAreaView style={{backgroundColor:"black", flex:1}}>
       <StatusBar barStyle="light-content" style={{backgroundColor:"red"}}/>
       {/* <CameraScreen /> */}
       {/* <Home /> */}
