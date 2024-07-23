@@ -28,7 +28,7 @@ export default function CameraScreen() {
   }
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', width:"100%", position:"relative", height:400}}>
+    <View style={{backgroundColor: "black", flex: 1, justifyContent: 'center', width:"100%", position:"relative", height:400}}>
       
       <CameraView style={{ flex: 1,}} facing={facing}>
         <View style={{ flex: 1, flexDirection: 'row', backgroundColor: 'transparent', margin: 64,}}>

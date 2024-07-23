@@ -1,20 +1,34 @@
 import React from 'react';
-import { SafeAreaView, Text, StatusBar, Settings } from 'react-native';
+import { SafeAreaView, StatusBar } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import CameraScreen from './components/CameraScreen';
 import Home from './components/HomeScreen';
 import History from './components/HistoryScreen';
 import Starred from './components/StarredScreen';
 
+const Stack = createStackNavigator();
+
 const App = () => {
   return (
-    <SafeAreaView style={{backgroundColor:"black", flex:1}}>
-      <StatusBar barStyle="light-content" style={{backgroundColor:"red"}}/>
-      {/* <CameraScreen /> */}
-      {/* <Home /> */}
-      {/* <History /> */}
-      <Starred />
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown: false}}>
+        <Stack.Screen name='Home' component={Home} />
+        <Stack.Screen name='Camera' component={CameraScreen} />
+        <Stack.Screen name='History' component={History} />
+        <Stack.Screen name='Favourites' component={Starred} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+const withSafeAreaView = (Component) => {
+  return (props) => (
+    <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar barStyle="light-content" />
+      <Component {...props} />
     </SafeAreaView>
   );
 };
 
-export default App;
+export default withSafeAreaView(App);
