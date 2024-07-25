@@ -33,9 +33,9 @@ const Starred = () => {
         removeItem(key);
     };
 
-    useEffect(() => {
-        console.log(starredItems); // This will log the updated state whenever it changes
-    }, [starredItems]); // Depend on starredItems
+    // useEffect(() => {
+    //     console.log(starredItems); // This will log the updated state whenever it changes
+    // }, [starredItems]); // Depend on starredItems
 
 
     const getImage = (key) => {
