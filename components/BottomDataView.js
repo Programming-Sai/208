@@ -15,8 +15,8 @@ data.reverse();
 
 
 
-const BottomDataView = ({ customStyles, externalOpen, setExternalOpen  }) => {
-  const [currentImage, setCurrentImage] = useState(require("../assets/picture.jpeg"));
+const BottomDataView = ({ customStyles, externalOpen, setExternalOpen, image  }) => {
+  const [currentImage, setCurrentImage] = useState({uri: image});
   const [toggle, setToggle] = useState(false);
 
 
@@ -24,20 +24,23 @@ const BottomDataView = ({ customStyles, externalOpen, setExternalOpen  }) => {
   function renderItems({item}){
     return(
     <TouchableOpacity style={{ paddingHorizontal: 5 }} onPress={()=>{
-        setCurrentImage(item.image); !data.some(item => item.key === '6') && data.unshift({key:'6', image:require("../assets/picture.jpeg")})}}>
+        setCurrentImage(item.image); !data.some(item => item.key === '6') && data.unshift({key:'6', image:{uri: image}})}}>
         <Image source={item.image} style={{ width: 100, height: 100, borderRadius: 10, borderColor:"white", borderWidth:1 }} />
     </TouchableOpacity>
     )
   };
 
 
+// TODO: Make sure that when any other image is selected, the taken image is added to the list
+
+
   return (
     <View style={[{backgroundColor:"black", borderTopLeftRadius:40, borderTopRightRadius:40, height:toggle || externalOpen ?"95%":0, flex:1, justifyContent:"center", alignItems:"center", zIndex: toggle || externalOpen  ? 10 : 5 }, customStyles]}>
-        <TouchableOpacity onPress={()=>{setToggle(!toggle); setExternalOpen(!externalOpen)}} style={{borderWidth:1, width:200, borderRadius:50, backgroundColor:"black", marginTop:toggle || externalOpen ?-10:-50, borderColor:"white", paddingBottom:toggle || externalOpen ?0:10, marginBottom:toggle || externalOpen ?0:-28, marginTop:-10}}>
+        <TouchableOpacity onPress={()=>{setToggle(false); setExternalOpen(false);}} style={{borderWidth:1, width:200, borderRadius:50, backgroundColor:"black", marginTop:toggle || externalOpen ?-10:-50, borderColor:"white", paddingBottom:toggle || externalOpen ?0:10, marginBottom:toggle || externalOpen ?0:-28, marginTop:-10}}>
             <Text style={{transform: [{ rotate: '90 deg' }],borderColor:"white", textAlign:"center", fontWeight:"bold", fontSize:20, color:"white", }}> { toggle || externalOpen  ? '\u27E9' : '\u27E8'} </Text>
         </TouchableOpacity>
         <ScrollView style={{padding:10, marginTop:20, }}>
-            <Image source={currentImage} style={{width:340, borderWidth:1, borderRadius:40, height:400, borderColor:"white"}}/>
+            <Image source={currentImage} style={{width:"100%", borderWidth:1, borderRadius:40, height:400, borderColor:"white"}}/>
             <FlatList 
                 data={data}
                 renderItem={renderItems}

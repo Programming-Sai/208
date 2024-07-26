@@ -12,7 +12,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown: false}}>
+      <Stack.Navigator initialRouteName='Camera' screenOptions={{headerShown: false}}>
         <Stack.Screen name='Home' component={Home} />
         <Stack.Screen name='Camera' component={CameraScreen} />
         <Stack.Screen name='History' component={History} />
@@ -25,7 +25,7 @@ const App = () => {
 const withSafeAreaView = (Component) => {
   return (props) => (
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="light-content" backgroundColor={'black'} translucent/>
       <Component {...props} />
     </SafeAreaView>
   );
