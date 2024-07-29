@@ -5,6 +5,8 @@ import { Video } from 'expo-av';
 import { createAssetAsync, getAlbumAsync, createAlbumAsync, addAssetsToAlbumAsync, requestPermissionsAsync } from 'expo-media-library';
 import SettingsPanel from './SettingsPanel';
 import BottomDataView from './BottomDataView';
+import * as FileSystem from 'expo-file-system';
+
 import { LogBox } from 'react-native';
 
 LogBox.ignoreAllLogs(false); // Show all logs including warnings and errors
@@ -13,7 +15,7 @@ LogBox.ignoreAllLogs(false); // Show all logs including warnings and errors
 
 
 
-export default function CameraScreen() {
+export default function CameraScreen({ navigation }) {
 
   const [facing, setFacing] = useState('back');
   const [permission, requestPermission] = useCameraPermissions();
@@ -72,6 +74,8 @@ export default function CameraScreen() {
       setCameraMode('photo');
       const photo = await cameraRef.takePictureAsync();
       setIsSaving(true);
+
+
       const asset = await createAssetAsync(photo.uri);
       let album = await getAlbumAsync('MyAppPhotos');
       if (!album) {
@@ -79,16 +83,57 @@ export default function CameraScreen() {
       } else {
         await addAssetsToAlbumAsync([asset], album.id, false);
       }
+
+
       setIsSaving(false);
       setImage(photo.uri);
       setShowBottomData(true);
     }
   };
 
+
+
+
+  const saveVideo = async (uri) => {
+    try {
+
+      const asset = await createAssetAsync(uri);
+      let album = await getAlbumAsync('MyAppPhotos', { includeSmartAlbums: true });
+      if (!album) {
+        await createAlbumAsync('MyAppPhotos', asset, false);
+      } else {
+        await addAssetsToAlbumAsync([asset], album.id, false);
+      }
+
+
+      console.log('Video saved to gallery');
+    } catch (error) {
+      console.error('Failed to save video', error);
+    }
+  };
+
+
+  const uploadVideo = async (uri) => {
+    const uploadUrl = 'http://your-server/upload'; // Replace with your server URL
+    try {
+      const response = await FileSystem.uploadAsync(uploadUrl, uri, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        httpMethod: 'POST',
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        fieldName: 'video',
+      });
+      const responseData = JSON.parse(response.body);
+      console.log('Upload successful:', responseData);
+    } catch (error) {
+      console.error('Upload failed:', error);
+    }
+  };
   
 
 
-  async function recordVid() {
+  async function takeVid() {
     if (cameraRef) {
       if (isRecording) {
         console.log('Stopped recording isRecording:', isRecording);
@@ -99,17 +144,9 @@ export default function CameraScreen() {
         console.log('Start recording');
         const video = cameraRef.recordAsync();
         video.then((video) => {
-          console.log('Video saved:', video?.uri);
+          console.log('Video; saved:', video?.uri);
           if (video?.uri && hasMediaLibraryPermission) {
-            const asset = createAssetAsync(video.uri);
-            let album = getAlbumAsync('MyAppVideos');
-            if (!album) {
-             createAlbumAsync('MyAppVideos', asset, false);
-              console.log('Album created and asset added');
-            } else {
-             addAssetsToAlbumAsync([asset], album.id, false);
-              console.log('Asset added to existing album');
-            }
+            saveVideo(video.uri)
           }
           alert('Video Saved.');
         });
@@ -128,7 +165,7 @@ export default function CameraScreen() {
         <View style={{ flex: 1, flexDirection: 'row', backgroundColor: 'transparent', margin: 64,}}>
           <View style={{flex: 1, alignSelf: 'flex-end', alignItems: 'center',}}>
 
-          <TouchableOpacity onPress={takePic} style={{ width:70, height:70, borderRadius:50, borderWidth:60, borderColor:"goldenrod", display:"flex", alignItems:"center", backgroundColor:"white", justifyContent: 'center', zIndex:100, borderWidth:1, marginBottom:40, }}>
+          <TouchableOpacity onPress={cameraMode === 'photo' ? takePic : takeVid }  style={{ width:70, height:70, borderRadius:50, borderWidth:60, borderColor:"goldenrod", display:"flex", alignItems:"center", backgroundColor:"white", justifyContent: 'center', zIndex:100, borderWidth:1, marginBottom:40, }}>
           {isRecording ? (
                   <View style={{ width: 20, height: 20, backgroundColor: "red" }} />
                 ) : (
@@ -156,8 +193,8 @@ export default function CameraScreen() {
       </CameraView>
       
 
-      <SettingsPanel  customStyles={{backgroundColor:"rgba(0,0,0,0.6)", position:"absolute",top:0, flex:1, justifyContent:"center", alignItems:"center", borderColor:"red", height:"100%", width:"85%"}}/>
-      <BottomDataView customStyles={{position:"absolute", bottom:0, left:0, right:0}} externalOpen={showBottomData} setExternalOpen={setShowBottomData} image={image}/>
+      <SettingsPanel navigation={navigation} cameraMode={cameraMode} setCameraMode={setCameraMode}  customStyles={{backgroundColor:"rgba(0,0,0,0.6)", position:"absolute",top:0, flex:1, justifyContent:"center", alignItems:"center", borderColor:"red", height:"100%", width:"85%"}}/>
+      {showBottomData && <BottomDataView customStyles={{position:"absolute", bottom:0, left:0, right:0}} externalOpen={showBottomData} setExternalOpen={setShowBottomData} image={image} />}
     </View>
   );
 }

@@ -61,7 +61,7 @@ const Starred = () => {
     return (
 
         <View style={{backgroundColor: "black", padding:20}}>
-            <ScrollView style={{height:"100%"}}>
+            <ScrollView style={{height:"110%", position:"relative"}}>
             <Text style={{color:"white", padding:10, fontSize:20, fontWeight:"bold", }}>Favourites</Text>
             {historyData.map((item) => (
                 <TouchableOpacity onPress={()=>{handleItemPress(item.key)}} key={item.key} style={{ borderRadius: 20, borderWidth: 1, borderColor: "white", marginVertical: 10, overflow: "hidden", position: 'relative' }}>

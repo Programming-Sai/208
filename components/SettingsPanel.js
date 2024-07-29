@@ -11,17 +11,34 @@ const settings = [
   { key: '5', setting: "History", image: require("../assets/History.png"), extraStyles:{}, extraStyles2:{marginLeft:-10} },
 ];
 
-const renderItems = ({ item }) => {
-  return (
-    <TouchableOpacity style={{ display:"flex", alignItems: 'center', justifyContent: 'center', padding:10, margin:10, width:"40%", borderRadius:20, gap:5, height:100 }}>
-      <Image source={item.image} style={[{ width: 30, height: 30, marginRight: 10}, item.extraStyles]} />
-      <Text style={[{ color: 'white', fontSize: 15, }, item.extraStyles2]}>{item.setting}</Text>
-    </TouchableOpacity>
-  );
-};
 
-const SettingsPanel = ({ customStyles }) => {
+const SettingsPanel = ({ customStyles, navigation, setCameraMode }) => {
   const [toggle, setToggle] = useState(true);
+
+
+  const renderItems = ({ item }) => {
+    return (
+      <TouchableOpacity onPress={()=>{
+        switch (item.key){
+          case '2':
+            setCameraMode('video');
+            break;
+          case '3':
+            setCameraMode('photo');
+            break;
+          case '5':
+            navigation.navigate('History');
+            break;
+        }
+      }} style={{ display:"flex", alignItems: 'center', justifyContent: 'center', padding:10, margin:10, width:"40%", borderRadius:20, gap:5, height:100 }}>
+        <Image source={item.image} style={[{ width: 30, height: 30, marginRight: 10}, item.extraStyles]} />
+        <Text style={[{ color: 'white', fontSize: 15, }, item.extraStyles2]}>{item.setting}</Text>
+      </TouchableOpacity>
+    );
+  };
+  
+
+
   return (
     <View style={[{ backgroundColor: '#333', padding: 10, width: '80%', height: '50%', left:toggle?"-100%":0, zIndex: toggle ? 5 : 10 }, customStyles]}>
       <FlatList
