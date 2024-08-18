@@ -3,26 +3,26 @@ import { Image, Text, View, TouchableOpacity, ImageBackground } from 'react-nati
 
 const Home = ({ navigation }) => {
   return (
-    <ImageBackground source={require('../assets/BG5.jpeg')} style={{backgroundColor: "transparent", width:"100%", height:"100%" }}>
-    <View style={{backgroundColor: "transparent", width:"100%", height:"100%", padding:20, }}>
+    <ImageBackground source={require('../assets/BG4.jpeg')} style={{backgroundColor: "transparent", width:"100%", height:"100%", flex:1 }}>
+    <View style={{backgroundColor: "transparent", width:"100%", height:"100%", padding:20, flex:1 }}>
     <View style={{marginBottom:10, padding:10}}>
         <Text style={{fontSize:25, textAlign:"center", fontWeight:"bold", color:"white", borderWidth:1, borderColor:"green", borderRadius:20, padding:15 }}>InnovaTech Product Scanner</Text>
       </View>
 
       <View style={{paddingBottom:10, paddingVertical:10, marginVertical:20, display:"flex", borderRadius:20, backgroundColor:"rgba(255,255,255,0.25)", padding:1, flexDirection:"row", alignItems:"center", justifyContent:"center", width:"100%", gap: 30, flexWrap:"wrap"}}>
-        <TouchableOpacity onPress={()=>{navigation.navigate('Camera')}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+        <TouchableOpacity onPress={()=>{navigation.navigate('Camera', {scanType:'auto'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
             <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/Auto.png')} />
             <Text style={{color:"white"}}>Auto</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>{navigation.navigate('Camera')}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+        <TouchableOpacity onPress={()=>{navigation.navigate('Camera', {scanType:'barcode'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
             <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/Barcode.png')} />
             <Text style={{color:"white"}}>Barcode</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>{navigation.navigate('Camera')}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+        <TouchableOpacity onPress={()=>{navigation.navigate('Camera', {scanType:'qrcode'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
             <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/Qrcode.png')} />
             <Text style={{color:"white"}}>QRcode</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>{navigation.navigate('Camera')}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+        <TouchableOpacity onPress={()=>{navigation.navigate('Camera', {scanType:'text'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
             <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/Text.png')} />
             <Text style={{color:"white"}}>Text</Text>
         </TouchableOpacity>

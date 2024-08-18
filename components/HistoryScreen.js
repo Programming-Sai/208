@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ImageBackground, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomDataView from './BottomDataView';
 
 const initialHistoryData = [
@@ -10,6 +11,9 @@ const initialHistoryData = [
     {key:'4', productImage:require('../assets/product2.jpeg'), scanType:'Barcode', productName:'Lorem', scannedDate:'01/01/2024', scannedTime: '02:30 PM'},
     {key:'5', productImage:require('../assets/product3.jpg'), scanType:'Qrcode', productName:'Lorem', scannedDate:'01/01/2024', scannedTime: '02:30 AM'},
 ];
+
+
+
 
 const History = () => {
     const initializeStarredItems = () => {
@@ -25,19 +29,12 @@ const History = () => {
     const [selectedItemKey, setSelectedItemKey] = useState(null); // Track selected item
     const [showBottomData, setShowBottomData] = useState(true); // Control visibility of BottomDataView
 
-
-    
-
     const toggleStarredItem = (key) => {
         setStarredItems(prevState => ({
             ...prevState,
             [key]: !prevState[key]
         }));
     };
-
-    // useEffect(() => {
-    //     console.log(starredItems); // This will log the updated state whenever it changes
-    // }, [starredItems]); // Depend on starredItems
 
 
     const getImage = (key) => {
@@ -50,10 +47,13 @@ const History = () => {
         Alert.alert(
             '',
             'This Item Would be Deleted',
-            [{ text: 'Delete Item', onPress: () => setHistoryData(prevData => prevData.filter(item => item.key !== key)) }, {text: 'Cancel'}]
+            [{ text: 'Delete Item', onPress: () => {
+                setHistoryData(prevData => prevData.filter(item => item.key !== key));
+                // Optionally remove from AsyncStorage as well
+                AsyncStorage.setItem('history', JSON.stringify(historyData.filter(item => item.key !== key)));
+            }}, {text: 'Cancel'}]
         );
     };
-
 
     const handleItemPress = (key) => {
         setSelectedItemKey(key);
@@ -61,9 +61,8 @@ const History = () => {
     };
 
     return (
-
         <View style={{backgroundColor: "black", padding:20}}>
-            <ScrollView style={{height:"110%", position:"relative"}}>
+            <ScrollView style={{height:"100%", position:"relative" }}>
               <Text style={{color:"white", padding:10, fontSize:20, fontWeight:"bold", }}>History</Text>
               {historyData.map((item) => (
                 <TouchableOpacity onPress={()=>{handleItemPress(item.key)}} key={item.key} style={{ borderRadius: 20, borderWidth: 1, borderColor: "white", marginVertical: 10, overflow: "hidden", position: 'relative' }}>
@@ -108,8 +107,7 @@ const History = () => {
                 />
             )}
         </View>
-      
-);
+    );
 };
 
 export default History;

@@ -6,19 +6,21 @@ import CameraScreen from './components/CameraScreen';
 import Home from './components/HomeScreen';
 import History from './components/HistoryScreen';
 import Starred from './components/StarredScreen';
-
+import { HistoryProvider } from './components/HistoryContext'; // Import HistoryProvider
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown: false}}>
-        <Stack.Screen name='Home' component={Home} />
-        <Stack.Screen name='Camera' component={CameraScreen} />
-        <Stack.Screen name='History' component={History} />
-        <Stack.Screen name='Favourites' component={Starred} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <HistoryProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='Home' screenOptions={{headerShown: false}}>
+          <Stack.Screen name='Home' component={Home} />
+          <Stack.Screen name='Camera' component={CameraScreen} />
+          <Stack.Screen name='History' component={History} />
+          <Stack.Screen name='Favourites' component={Starred} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </HistoryProvider>
   );
 };
 
