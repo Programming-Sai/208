@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ImageBackground, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import BottomDataView from './BottomDataView';
-import { useHistory } from '../components/HistoryContext'; 
+import { useHistory } from '../components/HistoryContext'; // Import useHistory from HistoryContext
 
-
-const History = () => {
-    const { history, setHistory, removeHistoryItem, clearHistory, toggleStarredItem } = useHistory();
-    const [selectedItemKey, setSelectedItemKey] = useState(null); 
-    const [showBottomData, setShowBottomData] = useState(false); 
+const Starred = () => {
+    const { history, setHistory, removeHistoryItem, clearHistory, toggleStarredItem } = useHistory(); // Get history and removeHistoryItem from context
+    const [selectedItemKey, setSelectedItemKey] = useState(null); // Track selected item
+    const [showBottomData, setShowBottomData] = useState(false); // Control visibility of BottomDataView
 
    
     const getImage = (key) => {
@@ -70,16 +69,14 @@ const History = () => {
 
     return (
         <View style={{ backgroundColor: "black", padding: 20 }}>
-            <ScrollView style={{ height: "100%", position: "relative", marginTop:10 }}>
-            <Text style={{ color: "white", padding: 10, fontSize: 20, fontWeight: "bold" }}>History</Text>
-                {
-                history.length > 0 && 
+            <ScrollView style={{ height: "100%", position: "relative" }}>
+                <Text style={{ color: "white", padding: 10, fontSize: 20, fontWeight: "bold" }}>Favourites</Text>
                 <TouchableOpacity onPress={handleClearHistory}>
                     <Text style={{color:"white", textAlign:"right", marginBottom:10, fontSize:15}}>Clear All</Text>
                 </TouchableOpacity>
-                }
+
                 
-                {history.length > 0 ? history.map((item, idx) => ( 
+                {history.length > 0 ? history.map((item, idx) => (
                     <TouchableOpacity
                         onPress={() => handleItemPress(idx)}
                         key={idx}
@@ -93,10 +90,8 @@ const History = () => {
                                 </View>
                                 <View style={{ marginLeft: 180 }}>
                                     <TouchableOpacity onPress={() => toggleStarredItem(idx)}>
-                                    {/* <Image source={getImage(idx)} resizeMode='contain' style={{ width: 30, height: 30, position: "absolute", top: -40, left: 30, padding: 5 }} /> */}
-                                    <Image source={history[idx].starred ? require('../assets/StarSelect.png') : require('../assets/Starred.png')} resizeMode='contain' style={{ width: 30, height: 30, position: "absolute", top: -40, left: 30, padding: 5 }} />
+                                        <Image source={getImage(idx)} resizeMode='contain' style={{ width: 30, height: 30, position: "absolute", top: -40, left: 30, padding: 5 }} />
                                     </TouchableOpacity>
-                                    {console.log(idx, history[idx].starred)}
 
                                     <TouchableOpacity onPress={() => handleRemoveItem(idx)}>
                                         <Image source={require('../assets/Delete.png')} resizeMode='contain' style={{ width: 30, height: 30, position: "absolute", top: -40, left: 90, padding: 10 }} />
@@ -136,4 +131,4 @@ const History = () => {
     );
 };
 
-export default History;
+export default Starred;

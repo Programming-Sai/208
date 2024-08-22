@@ -3,12 +3,13 @@ import { SafeAreaView, Image, Text, View, Settings, ScrollView, FlatList, Toucha
 
 
 
-const BottomDataView = ({ customStyles, externalOpen, setExternalOpen, image, responseFromAPI }) => {
-  const [currentImage, setCurrentImage] = useState({uri: responseFromAPI.firstThreeFrames ? responseFromAPI.firstThreeFrames[0] : image});
-  const [toggle, setToggle] = useState(false);
+const BottomDataView = ({ customStyles, externalOpen, setExternalOpen, image, responseFromAPI, selectedItemKey }) => {
 
-  const [imageList, setImageList] = useState(responseFromAPI && responseFromAPI.firstThreeFrames ? responseFromAPI.firstThreeFrames.map((imagePath, i) => ({key: String(i), image: { uri: imagePath }})) : [{key: '0', image: { uri: image }}]);
-  const [productInfo, setProductInfo] = useState(responseFromAPI.productData);
+  const [currentImage, setCurrentImage] = useState({uri: responseFromAPI[selectedItemKey].imageList[0]});
+  const [toggle, setToggle] = useState(false);
+  const [imageList, setImageList] = useState(responseFromAPI && responseFromAPI[selectedItemKey].imageList ? responseFromAPI[selectedItemKey].imageList.map((imagePath, i) => ({key: String(i), image: { uri: imagePath }})) : [{key: '0', image: { uri: image }}]);
+  const [productInfo, setProductInfo] = useState(responseFromAPI[selectedItemKey].productData);
+  const scanType = responseFromAPI[selectedItemKey].scanType;
 
 
   function renderItems({item}){
@@ -40,6 +41,7 @@ const BottomDataView = ({ customStyles, externalOpen, setExternalOpen, image, re
                 alwaysBounceHorizontal={true}
                 contentContainerStyle={{ paddingVertical: 10 }} />
             <View style={{paddingVertical:50, paddingHorizontal:10}}>
+                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Type Of Scan:</Text> {scanType.charAt(0).toUpperCase() + scanType.slice(1)}</Text>
                 <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Name:</Text> {productInfo.productName}</Text>
                 <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Price:</Text> {productInfo.productPrice}</Text>
                 <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Manufacturer/Brand:</Text> {productInfo.productManufacturer}</Text>

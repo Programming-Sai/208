@@ -34,3 +34,6 @@ const withSafeAreaView = (Component) => {
 };
 
 export default withSafeAreaView(App);
+
+
+// const starredHistory = history.filter(item => item.starred === true);
