@@ -6,12 +6,12 @@ const Home = ({ navigation }) => {
     <ImageBackground source={require('../assets/BG4.jpeg')} style={{backgroundColor: "transparent", width:"100%", height:"100%", flex:1 }}>
     <View style={{backgroundColor: "transparent", width:"100%", height:"100%", padding:20, flex:1 }}>
     <View style={{marginBottom:10, padding:10}}>
-        <Text style={{fontSize:25, textAlign:"center", fontWeight:"bold", color:"white", borderWidth:1, borderColor:"green", borderRadius:20, padding:15 }}>InnovaTech Product Scanner</Text>
+        <Text style={{fontSize:25, textAlign:"center", fontWeight:"bold", color:"white", borderWidth:1, borderColor:"rgba(30,69,68,255)", borderRadius:20, padding:15 }}>InnovaTech Product Scanner</Text>
       </View>
       <View style={{borderWidth:0.5, borderColor:"white", paddingBottom:10, paddingVertical:10, marginVertical:20, display:"flex", borderRadius:20, backgroundColor:"rgba(255,255,255,0.2)", padding:1, flexDirection:"row", alignItems:"center", justifyContent:"center", width:"100%", gap: 30, flexWrap:"wrap"}}>
-        <TouchableOpacity onPress={()=>{navigation.navigate('Camera', {scanType:'auto'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
-            <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/Auto.png')} />
-            <Text style={{color:"white"}}>Auto</Text>
+        <TouchableOpacity disabled={true} onPress={()=>{navigation.navigate('Camera', {scanType:'auto'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/AutoDisabled.png')} />
+            <Text style={{color:"grey"}}>Auto</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={()=>{navigation.navigate('Camera', {scanType:'barcode'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
             <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/Barcode.png')} />
@@ -21,9 +21,9 @@ const Home = ({ navigation }) => {
             <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/Qrcode.png')} />
             <Text style={{color:"white"}}>QRcode</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>{navigation.navigate('Camera', {scanType:'text'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
-            <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/Text.png')} />
-            <Text style={{color:"white"}}>Text</Text>
+        <TouchableOpacity disabled={true} onPress={()=>{navigation.navigate('Camera', {scanType:'text'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/TextDisabled.png')} />
+            <Text style={{color:"grey"}}>Text</Text>
         </TouchableOpacity>
       </View>
       <Text style={{color:"white", textAlign:"center", fontSize:18, letterSpacing:2, marginBottom:10}}>Select Scanner Type</Text>

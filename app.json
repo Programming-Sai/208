@@ -4,12 +4,12 @@
     "slug": "CameraScan",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Video.png",
+    "icon": "./assets/appIcon.jpeg",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/loadingTwo.gif",
-      "resizeMode": "contain",
-      "backgroundColor": "#000"
+      "image": "./assets/appSplash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "##365b44"
     },
     "ios": {
       "supportsTablet": true,

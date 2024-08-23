@@ -15,7 +15,7 @@ const SettingsPanel = ({ customStyles, navigation, setCameraMode, cameraMode, ca
   const settings = [
     { key: '0', setting: "Zoom in", image: require("../assets/ZoomIn.png"), extraStyles: {}, extraStyles2: {} },
     { key: '1', setting: "Zoom Out", image: require("../assets/ZoomOut.png"), extraStyles: { width: 50 }, extraStyles2: {} },
-    { key: '2', setting: "Video", image: require("../assets/Video.png"), extraStyles: { width: 50 }, extraStyles2: { marginLeft: -10 } },
+    { key: '2', setting: "Video", image: require("../assets/VideoDisabled.png"), extraStyles: { width: 50 }, extraStyles2: { marginLeft: -10 } },
     { key: '3', setting: "Photo", image: require("../assets/Camera.png"), extraStyles: { width: 60 }, extraStyles2: { marginLeft: -10 } },
     { key: '4', setting: "Flash", image: flash == 'on' ? require("../assets/FlashOn.png") : require("../assets/FlashOff.png"), extraStyles: { width: 50, height:50 }, extraStyles2: { marginLeft: -20, marginBottom:15 } },
     { key: '5', setting: "History", image: require("../assets/History.png"), extraStyles: {}, extraStyles2: { marginLeft: -10 } },
@@ -142,10 +142,12 @@ const SettingsPanel = ({ customStyles, navigation, setCameraMode, cameraMode, ca
             }, 2000);
           }
         }}
+
+        disabled={item.key === '2' ? true : false}
         style={{ display: "flex", alignItems: 'center', justifyContent: 'center', padding: 10, margin: 10, width: "40%", borderRadius: 20, gap: 5, height: 100 }}
       >
         <Image source={item.image} style={[{ width: 30, height: 30, marginRight: 10 }, item.extraStyles]} />
-        <Text style={[{ color: 'white', fontSize: 15, }, item.extraStyles2]}>{item.setting}</Text>
+        <Text style={[{ color: item.key === '2' ? 'grey' : 'white', fontSize: 15, }, item.extraStyles2]}>{item.setting}</Text>
       </TouchableOpacity>
     );
   };

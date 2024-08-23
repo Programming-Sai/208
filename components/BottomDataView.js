@@ -10,6 +10,7 @@ const BottomDataView = ({ customStyles, externalOpen, setExternalOpen, image, re
   const [imageList, setImageList] = useState(responseFromAPI && responseFromAPI[selectedItemKey].imageList ? responseFromAPI[selectedItemKey].imageList.map((imagePath, i) => ({key: String(i), image: { uri: imagePath }})) : [{key: '0', image: { uri: image }}]);
   const [productInfo, setProductInfo] = useState(responseFromAPI[selectedItemKey].productData);
   const scanType = responseFromAPI[selectedItemKey].scanType;
+  const scanResult = responseFromAPI[selectedItemKey].barcodeData || responseFromAPI[selectedItemKey].qrCodeData
 
 
   function renderItems({item}){
@@ -49,6 +50,7 @@ const BottomDataView = ({ customStyles, externalOpen, setExternalOpen, image, re
                 <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Date Manufactured:</Text> {productInfo.productDateManufactured}</Text>
                 <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Country Of Origin:</Text> {productInfo.productCountryOfOrigin}</Text>
                 <Text style={{marginBottom:10, fontStyle:"italic", color:"white", textAlign:"justify"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Description:</Text> {productInfo.productDescription}</Text>
+                <Text style={{marginBottom:10, fontStyle:"italic", color:"white", textAlign:"justify"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Scan Result:</Text> {scanResult}</Text>
             </View>
         </ScrollView>
     </View>

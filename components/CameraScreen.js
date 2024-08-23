@@ -26,7 +26,7 @@ const formatTime = (date) => {
 };
 
 
-
+const serverURL = "http://192.168.43.223:3000"
 
 export default function CameraScreen({ navigation, route }) {
   const { scanType } = route.params || {};
@@ -53,8 +53,10 @@ export default function CameraScreen({ navigation, route }) {
   const [zoom, setZoom] = useState(0);
   const [flash, setFlash] = useState('off');
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [codeScanned, setCodeScanned] = useState({});
 
 
+  
 
 
   useEffect(() => {
@@ -182,11 +184,10 @@ export default function CameraScreen({ navigation, route }) {
     }
   };
   
-// console.log("\n\n\n\n\n\n\n .\n\n")
 
 
   const uploadVideo = async (uri) => {
-    const uploadUrl = 'http://192.168.43.223:3000/upload-video'; // Replace with your server's IP address
+    const uploadUrl = `${serverURL}/upload-image`; // Replace with your server's IP address
     try {
       const formData = new FormData();
       formData.append('video', {
@@ -220,9 +221,9 @@ export default function CameraScreen({ navigation, route }) {
               scannedDate: scannedDate,
               scannedTime: scannedTime,
 
-              barcodeData: responseData.barcodeData,
-              ocrData: responseData.ocrData,
-              qrCodeData: responseData.qrCodeData
+              barcodeData: codeScanned.type === 32 ? codeScanned.data : '',
+              qrCodeData: codeScanned.type === 256 ? codeScanned.data : ''
+
 
             };
 
@@ -271,14 +272,13 @@ export default function CameraScreen({ navigation, route }) {
   }
 };
   
-// TODO: make sure that when te cameramode is changed it reflexts instantly.
 
 
 const uploadImage = async (uri) => {
   setImage(uri);
   setisUploading(true);
 
-  const uploadUrl = 'http://192.168.43.223:3000/upload-image'; // Replace with your server's IP address
+  const uploadUrl = `${serverURL}/upload-image`; // Replace with your server's IP address
 
   const formData = new FormData();
   formData.append('image', {
@@ -313,9 +313,8 @@ const uploadImage = async (uri) => {
         scannedDate: scannedDate,
         scannedTime: scannedTime,
 
-        barcodeData: responseData.barcodeData,
-        ocrData: responseData.ocrData,
-        qrCodeData: responseData.qrCodeData
+        barcodeData: codeScanned.type === 32 ? codeScanned.data : '',
+        qrCodeData: codeScanned.type === 256 ? codeScanned.data : ''
 
       };
 
@@ -370,66 +369,46 @@ const uploadImage = async (uri) => {
   };
 
 
-// TODO Handle situation where server is down or, network issues arise.
-
-
   return (
     <View style={{backgroundColor: "black", flex: 1, justifyContent: 'center', width:"100%", position:"relative", height:400}}>
 
-      <PinchGestureHandler
-          onGestureEvent={onPinchGestureEvent}
-          onHandlerStateChange={onPinchHandlerStateChange}
-        >
+      <PinchGestureHandler onGestureEvent={onPinchGestureEvent} onHandlerStateChange={onPinchHandlerStateChange} >
+        <TapGestureHandler onHandlerStateChange={handleTap} numberOfTaps={2} >
+          <CameraView onBarcodeScanned={(data)=>{setCodeScanned(data); console.log(data)}} style={{ flex: 1,}} facing={facing} ref={ref=>{setCameraRef(ref)}} mode={cameraMode} zoom={zoom} flash={flash} >
+            <View style={{ flex: 1, flexDirection: 'row', backgroundColor: 'transparent', margin: 64,}}>
+              <View style={{flex: 1, alignSelf: 'flex-end', alignItems: 'center',}}>
 
+                <TouchableOpacity onPress={cameraMode === 'photo' ? takePic : takeVid }  style={{ width:70, height:70, borderRadius:50, borderWidth:60, borderColor:"goldenrod", display:"flex", alignItems:"center", backgroundColor:"white", justifyContent: 'center', zIndex:100, borderWidth:1, marginBottom:40, }}>
+              {isRecording ? (
+                      <View style={{ width: 20, height: 20, backgroundColor: "red" }} />
+                    ) : (
+                      cameraMode === 'photo' ? (
+                        <Image source={require("../assets/CameraDark.png")} resizeMode='contain' style={{ width: "100%" }} />
+                      ) : (
+                        <Image source={require("../assets/VideoDark.png")} resizeMode='contain' style={{ width: "100%" }} />
+                      )
+                    )}            
+                </TouchableOpacity>
+                {
+                  cameraMode === 'video' &&  isRecording &&
+                  <Text style={{color:"white", fontSize:20, textAlign:"center", marginTop:-10}}>{formatRecordingTime(elapsedTime)}</Text>
+                }
 
-      <TapGestureHandler
-              onHandlerStateChange={handleTap}
-              numberOfTaps={2} // Detect double taps
-      >
+                {
+                isUploading && 
+                  <Modal animationType="slide" transparent={true} visible={modalLoadingVisible} onRequestClose={() => {setModalLoadingVisible(false);}}>
+                    <View style={{backgroundColor:"rgba(0,90,0,0.2)", height:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+                      <Image source={require('../assets/loadingTwo.gif')} style={{width:"30%", height:"20%"}}/>
+                      <Text style={{color:"white", fontSize:20, textAlign:"center", fontWeight:"bold"}}>{`Processing ${cameraMode.charAt(0).toUpperCase() + cameraMode.slice(1)}...`}</Text>
+                    </View>
+                  </Modal>
+                }
 
-
-      <CameraView style={{ flex: 1,}} facing={facing} ref={ref=>{setCameraRef(ref)}} mode={cameraMode} zoom={zoom} flash={flash} >
-        <View style={{ flex: 1, flexDirection: 'row', backgroundColor: 'transparent', margin: 64,}}>
-          <View style={{flex: 1, alignSelf: 'flex-end', alignItems: 'center',}}>
-
-          <TouchableOpacity onPress={cameraMode === 'photo' ? takePic : takeVid }  style={{ width:70, height:70, borderRadius:50, borderWidth:60, borderColor:"goldenrod", display:"flex", alignItems:"center", backgroundColor:"white", justifyContent: 'center', zIndex:100, borderWidth:1, marginBottom:40, }}>
-          {isRecording ? (
-                  <View style={{ width: 20, height: 20, backgroundColor: "red" }} />
-                ) : (
-                  cameraMode === 'photo' ? (
-                    <Image source={require("../assets/CameraDark.png")} resizeMode='contain' style={{ width: "100%" }} />
-                  ) : (
-                    <Image source={require("../assets/VideoDark.png")} resizeMode='contain' style={{ width: "100%" }} />
-                  )
-                )}            
-            </TouchableOpacity>
-            {
-              cameraMode === 'video' &&  isRecording &&
-              <Text style={{color:"white", fontSize:20, textAlign:"center", marginTop:-10}}>{formatRecordingTime(elapsedTime)}</Text>
-            }
-
-
-            {isUploading && 
-              <Modal animationType="slide" transparent={true} visible={modalLoadingVisible} onRequestClose={() => {setModalLoadingVisible(false);}}>
-                <View style={{backgroundColor:"rgba(0,90,0,0.2)", height:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
-                  <Image source={require('../assets/loadingTwo.gif')} style={{width:"30%", height:"20%"}}/>
-                  <Text style={{color:"white", fontSize:20, textAlign:"center", fontWeight:"bold"}}>{`Processing ${cameraMode.charAt(0).toUpperCase() + cameraMode.slice(1)}...`}</Text>
-                </View>
-               </Modal>
-            }
-
-            
-
-          </View>
-        </View>
-      </CameraView>
-
-      </TapGestureHandler>
-
-
+              </View>
+            </View>
+          </CameraView>
+        </TapGestureHandler>
       </PinchGestureHandler>
-
-
       <SettingsPanel navigation={navigation} cameraMode={cameraMode} setCameraMode={setCameraMode} cameraRef={cameraRef} isRecording={isRecording} setCameraReady={setCameraReady} zoom={zoom} setZoom={setZoom} flash={flash} setFlash={setFlash}  customStyles={{backgroundColor:"rgba(0,0,0,0.6)", position:"absolute",top:0, flex:1, justifyContent:"center", alignItems:"center", borderColor:"red", height:"100%", width:"85%"}}/>
       {showBottomData && <BottomDataView customStyles={{position:"absolute", bottom:0, left:0, right:0}} externalOpen={showBottomData} setExternalOpen={setShowBottomData} image={image} responseFromAPI={history} selectedItemKey={history.length -1} />}
     </View>
