@@ -1,28 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Image, Text, View, Settings, ScrollView, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { Image, Text, View, ScrollView, FlatList, TouchableOpacity, Clipboard, ToastAndroid } from 'react-native';
 
 
 
 const BottomDataView = ({ customStyles, externalOpen, setExternalOpen, image, responseFromAPI, selectedItemKey }) => {
 
-  const [currentImage, setCurrentImage] = useState({uri: responseFromAPI[selectedItemKey].imageList[0]});
+  const [currentImage, setCurrentImage] = useState({uri: responseFromAPI[selectedItemKey].product_images[0]});
   const [toggle, setToggle] = useState(false);
-  const [imageList, setImageList] = useState(responseFromAPI && responseFromAPI[selectedItemKey].imageList ? responseFromAPI[selectedItemKey].imageList.map((imagePath, i) => ({key: String(i), image: { uri: imagePath }})) : [{key: '0', image: { uri: image }}]);
-  const [productInfo, setProductInfo] = useState(responseFromAPI[selectedItemKey].productData);
+  const [imageList, setImageList] = useState(responseFromAPI && responseFromAPI[selectedItemKey].product_images ? responseFromAPI[selectedItemKey].product_images.map((imagePath, i) => ({key: String(i), image: { uri: imagePath }})) : [{key: '0', image: { uri: image }}]);
+  const [productInfo, setProductInfo] = useState(responseFromAPI[selectedItemKey]);
   const scanType = responseFromAPI[selectedItemKey].scanType;
-  const scanResult = responseFromAPI[selectedItemKey].barcodeData || responseFromAPI[selectedItemKey].qrCodeData
+  const scanResult = responseFromAPI[selectedItemKey].product_code
+
+
+  const copy = () => {
+    if (scanResult){
+      Clipboard.setString(scanResult);
+      ToastAndroid.show(`${scanResult} Copied To Clipboard`, ToastAndroid.SHORT);
+    }
+  };
 
 
   function renderItems({item}){
     return(
     <TouchableOpacity style={{ paddingHorizontal: 5 }} onPress={()=>{
-        setCurrentImage(item.image); 
+        setCurrentImage(item.image); ``
         }}>
         <Image source={item.image} style={{ width: 100, height: 100, borderRadius: 10, borderColor:"white", borderWidth:1 }} />
     </TouchableOpacity>
     )
   };
-
 
 
 
@@ -38,22 +45,31 @@ const BottomDataView = ({ customStyles, externalOpen, setExternalOpen, image, re
                 data={imageList}
                 renderItem={renderItems}
                 keyExtractor={(item)=>item.key}
-                horizontal={true} 
+                horizontal={true}                                                                              
                 alwaysBounceHorizontal={true}
                 contentContainerStyle={{ paddingVertical: 10 }} />
             <View style={{paddingVertical:50, paddingHorizontal:10}}>
                 <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Type Of Scan:</Text> {scanType.charAt(0).toUpperCase() + scanType.slice(1)}</Text>
-                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Name:</Text> {productInfo.productName}</Text>
-                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Price:</Text> {productInfo.productPrice}</Text>
-                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Manufacturer/Brand:</Text> {productInfo.productManufacturer}</Text>
-                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Expiry Date: </Text> {productInfo.productExpriryDate}</Text>
-                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Date Manufactured:</Text> {productInfo.productDateManufactured}</Text>
-                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Country Of Origin:</Text> {productInfo.productCountryOfOrigin}</Text>
-                <Text style={{marginBottom:10, fontStyle:"italic", color:"white", textAlign:"justify"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Description:</Text> {productInfo.productDescription}</Text>
-                <Text style={{marginBottom:10, fontStyle:"italic", color:"white", textAlign:"justify"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Scan Result:</Text> {scanResult}</Text>
+                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Name:</Text> {productInfo.product_name}</Text>
+                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Price:</Text> {productInfo.product_price}</Text>
+                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Manufacturer/Brand:</Text> {productInfo.product_brand}</Text>
+                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Expiry Date: </Text> {productInfo.product_expiry_date}</Text>
+                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Date Manufactured:</Text> {productInfo.product_manufacturing_date}</Text>
+                <Text style={{marginBottom:10, fontStyle:"italic", color:"white"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Country Of Origin:</Text> {productInfo.product_country_of_origin}</Text>
+                <Text style={{marginBottom:10, fontStyle:"italic", color:"white", textAlign:"justify"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Product Description:</Text> {productInfo.product_description}</Text>
+                
+                <View style={{display:"flex", justifyContent:"space-between", alignItems:"center", gap:20 }} >
+                  <Text style={{marginBottom:10, fontStyle:"italic", color:"white", textAlign:"justify"}}><Text style={{fontSize:15, fontWeight:"bold", letterSpacing:1}}>Scan Result:</Text>  <Text>{scanResult}</Text></Text>  
+                  
+                  <TouchableOpacity onPress={ copy } style={{backgroundColor:"rgba(255,255,255,0.3)", borderRadius:50, flexDirection:"row", display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, padding:10}}>
+                      <Image resizeMode='contain' style={{width:20, height:20}} source={require('../assets/Copy.png')}/>
+                      <Text style={{color:"white"}}>Copy Scan Result</Text>
+                  </TouchableOpacity>
+                </View>
             </View>
         </ScrollView>
     </View>
   );
 };
 export default BottomDataView;
+

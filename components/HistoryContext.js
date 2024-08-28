@@ -6,18 +6,18 @@ import { isEqual } from 'lodash';
 
 
 
-
-
-// Directory for saving images in the file system
-// const imagesDirectory = FileSystem.documentDirectory + 'images/';
-
 // Create the History Context
 const HistoryContext = createContext();
 
 export const HistoryProvider = ({ children }) => {
   const [history, setHistory] = useState([]);
-  const [starredHistory, setStarredHistory] = useState(history.filter(item => item.starred === true));
-
+  const [starredHistory, setStarredHistory] = useState(() => {
+    // Ensure 'history' is treated as an array, even if it's not populated
+    const safeHistory = Array.isArray(history) ? history : [];
+    return safeHistory.filter(item => item.starred === true);
+  });
+  const [removeHistoryCountNote, setRemoveHistoryCountNote] = useState(false);
+  
 
   // Load history data from AsyncStorage when the component mounts
   useEffect(() => {
@@ -40,16 +40,16 @@ export const HistoryProvider = ({ children }) => {
 
   useEffect(() => {
     const logAsyncStorageData = async () => {
-    //   try {
-    //     const data = await AsyncStorage.getItem('historyData');
-    //     if (data) {
-    //       console.log('Data in AsyncStorage:', JSON.parse(data));
-    //     } else {
-    //       console.log('No data found in AsyncStorage.');
-    //     }
-    //   } catch (error) {
-    //     console.error('Failed to retrieve data from AsyncStorage:', error);
-    //   }
+      try {
+        const data = await AsyncStorage.getItem('historyData');
+        if (data) {
+          console.log('Data in AsyncStorage:', JSON.parse(data));
+        } else {
+          console.log('No data found in AsyncStorage.');
+        }
+      } catch (error) {
+        console.error('Failed to retrieve data from AsyncStorage:', error);
+      }
 
     console.log("\n\n\n")
     };
@@ -72,9 +72,12 @@ export const HistoryProvider = ({ children }) => {
 
   // Add a new item to the history
   const addHistoryItem = async (item) => {
+    displayHistory()
     const updatedHistory = [...history, item];
     setHistory(updatedHistory);
     await saveHistoryData(updatedHistory); // Save updated history to AsyncStorage
+    displayHistory()
+    setRemoveHistoryCountNote(true);
   };
 
   // Remove an item from the history by index
@@ -86,6 +89,8 @@ export const HistoryProvider = ({ children }) => {
     // displayHistory();
     console.log('Current History Length:', history.length, '\nIndex: ', index)
   };
+
+  // removeHistoryItem(0);
 
 
 
@@ -203,7 +208,7 @@ export const HistoryProvider = ({ children }) => {
       setStarredHistory([]);
     await saveHistoryData(updatedHistory); // Save the updated history to AsyncStorage
     // displayHistory(); // Optional: Display the history for debugging
-  };
+  }; 
   
 
 
@@ -219,7 +224,7 @@ export const HistoryProvider = ({ children }) => {
         displayHistory(); // Display history after clearing
     };
 
-
+    // clearHistory()
 
     const clearDirectory = async (directoryPath) => {
     try {
@@ -257,7 +262,9 @@ export const HistoryProvider = ({ children }) => {
         setStarredHistory,
         unStarAll,
         downloadImages,
-        removeStarredItem
+        removeStarredItem,
+        removeHistoryCountNote, 
+        setRemoveHistoryCountNote
       }}
     >
       {children}

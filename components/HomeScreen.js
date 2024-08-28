@@ -1,7 +1,9 @@
 import React from 'react';
 import { Image, Text, View, TouchableOpacity, ImageBackground } from 'react-native';
+import { useHistory } from './HistoryContext';
 
 const Home = ({ navigation }) => {
+  const{ history, removeHistoryCountNote } = useHistory();
   return (
     <ImageBackground source={require('../assets/BG4.jpeg')} style={{backgroundColor: "transparent", width:"100%", height:"100%", flex:1 }}>
     <View style={{backgroundColor: "transparent", width:"100%", height:"100%", padding:20, flex:1 }}>
@@ -13,13 +15,13 @@ const Home = ({ navigation }) => {
             <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/AutoDisabled.png')} />
             <Text style={{color:"grey"}}>Auto</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>{navigation.navigate('Camera', {scanType:'barcode'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
-            <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/Barcode.png')} />
-            <Text style={{color:"white"}}>Barcode</Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={()=>{navigation.navigate('Camera', {scanType:'qrcode'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
             <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/Qrcode.png')} />
             <Text style={{color:"white"}}>QRcode</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>{navigation.navigate('Camera', {scanType:'barcode'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/Barcode.png')} />
+            <Text style={{color:"white"}}>Barcode</Text>
         </TouchableOpacity>
         <TouchableOpacity disabled={true} onPress={()=>{navigation.navigate('Camera', {scanType:'text'})}} style={{flexBasis:"40%", display:"flex", justifyContent:"center", alignItems:"center"}}>
             <Image style={{width:"100%", height:100}} resizeMode='contain' source={require('../assets/TextDisabled.png')} />
@@ -32,6 +34,9 @@ const Home = ({ navigation }) => {
             <Image source={require('../assets/History.png')} style={{width:"25%", height: 40}} resizeMode='contain' />
             <Text style={{color:"white"}}>History</Text>
         </TouchableOpacity>
+
+        { removeHistoryCountNote && <View style={{position:"absolute", left:"35%", top:"95%", backgroundColor:"red", borderRadius:50, width:25, height:25, display:"flex", justifyContent:"center", alignItems:"center", borderColor:"white", borderWidth:0.5 }}><Text style={{color:"white"}}>{history.length}</Text></View> }        
+        
         <TouchableOpacity onPress={()=>{navigation.navigate('Favourites')}} style={{ gap:10, borderRadius:20, borderColor:"white", borderWidth:0.2, backgroundColor:"rgba(30,69,68,255)", display:"flex", justifyContent:"center", flexDirection:"row", alignItems:"center"}}>
             <Image source={require('../assets/Starred.png')} style={{width:"20%", height: 40}} resizeMode='contain' />
             <Text style={{color:"white"}}>Favourites</Text>

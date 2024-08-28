@@ -5,16 +5,11 @@ import { useHistory } from '../components/HistoryContext';
 
 
 const History = () => {
-    const { history, setHistory, removeHistoryItem, clearHistory, toggleStarredItem } = useHistory();
+    const { history, setRemoveHistoryCountNote , removeHistoryItem, clearHistory, toggleStarredItem } = useHistory();
     const [selectedItemKey, setSelectedItemKey] = useState(null); 
     const [showBottomData, setShowBottomData] = useState(false); 
 
-   
-    const getImage = (key) => {
-        return history[key].starred
-            ? require('../assets/Starred.png')
-            : require('../assets/StarSelect.png');
-    };
+    setRemoveHistoryCountNote(false);
 
     const handleItemPress = (key) => {
         setSelectedItemKey(key);
@@ -85,15 +80,14 @@ const History = () => {
                         key={idx}
                         style={{ borderRadius: 20, borderWidth: 1, borderColor: "white", marginVertical: 10, overflow: "hidden", position: 'relative' }}
                     >
-                        <ImageBackground source={{ uri: item.imageList[0] }} style={{ width: "100%", height: 120 }}>
-                            <View style={{ backgroundColor: 'rgba(0,0,0,0.1)', width: "100%", height: "100%", padding: 10, display: "flex", justifyContent: "center", alignItems: "flex-start", gap: 10 }}>
+                        <ImageBackground source={{ uri: item.product_images[0] }} style={{ width: "100%", height: 120 }}>{console.log("Image: ", item.product_images[0])}
+                            <View style={{ backgroundColor: 'rgba(0,0,0,0.3)', width: "100%", height: "100%", padding: 10, display: "flex", justifyContent: "center", alignItems: "flex-start", gap: 10 }}>
                                 <View style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", marginBottom: -10 }}>
                                     <Text style={{ color: "white", fontWeight: 'bold', fontSize: 17 }}>{item.scanType.charAt(0).toUpperCase() + item.scanType.slice(1)}</Text>
-                                    <Text style={{ color: "white", fontWeight: 'bold', fontSize: 17, maxWidth:'70%' }} numberOfLines={1} ellipsizeMode='middle' >{item.productData.productName}</Text>
+                                    <Text style={{ color: "white", fontWeight: 'bold', fontSize: 17, maxWidth:'70%' }} numberOfLines={1} ellipsizeMode='middle' >{item.product_name}</Text>
                                 </View>
                                 <View style={{ marginLeft: 180 }}>
                                     <TouchableOpacity onPress={() => toggleStarredItem(idx)}>
-                                    {/* <Image source={getImage(idx)} resizeMode='contain' style={{ width: 30, height: 30, position: "absolute", top: -40, left: 30, padding: 5 }} /> */}
                                     <Image source={history[idx].starred ? require('../assets/StarSelect.png') : require('../assets/Starred.png')} resizeMode='contain' style={{ width: 30, height: 30, position: "absolute", top: -40, left: 30, padding: 5 }} />
                                     </TouchableOpacity>
                                     {console.log(idx, history[idx].starred)}

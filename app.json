@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "CameraScan",
-    "slug": "CameraScan",
+    "name": "InnovaTech Product Scanner",
+    "slug": "InnovaTech-Product-Scanner",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/appIcon.jpeg",
+    "icon": "./assets/appIcon.png",
     "userInterfaceStyle": "dark",
     "splash": {
       "image": "./assets/appSplash.png",
       "resizeMode": "cover",
-      "backgroundColor": "##365b44"
+      "backgroundColor": "#365b44"
     },
     "ios": {
       "supportsTablet": true,
@@ -24,11 +24,16 @@
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",
         "RECORD_AUDIO"
-
-      ]
+      ],
+      "package": "com.saiah.InnovaTechProductScanner"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8c068461-3502-4749-bc72-96cf02ab63be"
+      }
     }
   }
 }
